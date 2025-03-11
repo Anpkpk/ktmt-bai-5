@@ -3,7 +3,7 @@ import time
 
 LCD_PINS = {'RS': 23, 'E': 27, 'D4': 18, 'D5': 17, 'D6': 14, 'D7': 3, 'BL': 2}
 BTS={"BT_1":21, "BT_2": 26, "BT_3": 20, "BT_4": 19}
-RLS={"RELAY_1":16, "RELAY 2": 12, "LED":13}
+RLS={"RELAY_1":16, "RELAY_2": 12, "LED":13}
 
 
 def pull_up_bts():
@@ -73,10 +73,10 @@ def on_button1_pressed():
             for i in range(1, 10):
                 lcd_display_string(f"{i}", 1)
                 time.sleep(0.25)
-                lcd_clear()
+                
                 if GPIO.input(BTS['BT_1']) == GPIO.HIGH:
                     lcd_display_string(f"{i}", 1)
-                    password.append(str(i))
+                    password += str(i)
                     time.sleep(0.5)
                     break		
             
@@ -112,11 +112,12 @@ def main():
 		if GPIO.input(BTS["BT_1"]) == GPIO.LOW:
 			on_button1_pressed()
 			time.sleep(0.25)
-			lcd_clear()
-			time.sleep(0.25)
 		if len(password) == 3:
-			check = check_password(password)
+			lcd_display_string("***", 1)
+			check += check_password(password)
 			password = ""
+			lcd_clear()
+			
 		if check == 2:
 			lcd_clear()
 			lcd_display_string("!sai 2 lan!", 1)
